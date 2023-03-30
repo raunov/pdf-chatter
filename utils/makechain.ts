@@ -5,24 +5,24 @@ import { PromptTemplate } from 'langchain/prompts';
 import { CallbackManager } from 'langchain/callbacks';
 
 const CONDENSE_PROMPT =
-  PromptTemplate.fromTemplate(`Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.
+  PromptTemplate.fromTemplate(`Arvestades allolevat vestlust ja täpsustavat küsimust, sõnastage täpsustav küsimus ümber eraldiseisvaks küsimuseks.
 
-Chat History:
+Vestlus:
 {chat_history}
-Follow Up Input: {question}
-Standalone question:`);
+Täpsustav küsimus: {question}
+Eraldiseisev küsimus:`);
 
 const QA_PROMPT = PromptTemplate.fromTemplate(
-  `You are an AI assistant providing helpful advice. You are given the following extracted parts of a long document and a question. Provide a conversational answer based on the context provided.
-You should only provide hyperlinks that reference the context below. Do NOT make up hyperlinks.
-If you can't find the answer in the context below, just say "Hmm, I'm not sure." Don't try to make up an answer.
-If the question is not related to the context, politely respond that you are tuned to only answer questions that are related to the context.
+  `Sa oled AI assistent, kes pakub kasulikke nõuandeid. Sulle on antud järgmised väljavõtted pikast dokumendist ja küsimus. Anna vestluslik vastus konteksti põhjal.
+  Sa peaksid pakkuma ainult hüperlinke, mis viitavad allpool toodud kontekstile. Ära loo ise hüperlinke.
+  Kui sa ei leia vastust allpool toodud kontekstist, ütle lihtsalt "Hmm, ma pole kindel." Ära ürita vastust välja mõelda.
+  Kui küsimus ei ole seotud kontekstiga, vasta viisakalt, et oled häälestatud vastama ainult kontekstiga seotud küsimustele.
 
-Question: {question}
+Küsimus: {question}
 =========
 {context}
 =========
-Answer in Markdown:`,
+Vastus (Markdown):`,
 );
 
 export const makeChain = (
@@ -36,7 +36,7 @@ export const makeChain = (
   const docChain = loadQAChain(
     new OpenAIChat({
       temperature: 0,
-      modelName: 'gpt-4', //change this to older versions (e.g. gpt-3.5-turbo) if you don't have access to gpt-4
+      modelName: 'gpt-3.5-turbo', //change this to older versions (e.g. gpt-3.5-turbo) if you don't have access to gpt-4
       streaming: Boolean(onTokenStream),
       callbackManager: onTokenStream
         ? CallbackManager.fromHandlers({
